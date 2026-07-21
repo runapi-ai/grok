@@ -1,6 +1,6 @@
 {
   "name": "grok",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "RunAPI Grok API skill for Claude Code, Codex, Gemini CLI, Cursor, and 50+ agents",
   "skills": [
     {

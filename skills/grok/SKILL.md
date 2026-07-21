@@ -1,6 +1,6 @@
 ---
 name: grok
-description: Call Grok 4.5 through RunAPI with the official OpenAI SDK or compatible clients. Use when the user asks for Grok chat, streaming completions, reasoning effort, function tools, structured JSON output, or wants to point an OpenAI-compatible client at RunAPI.
+description: Call Grok 4.3 and 4.5 through RunAPI with the official OpenAI SDK or compatible clients. Use when the user asks for Grok Chat Completions, Responses, streaming, reasoning effort, function tools, structured JSON output, or wants to point an OpenAI-compatible client at RunAPI.
 metadata:
   openclaw:
     homepage: https://runapi.ai/models/grok
@@ -18,10 +18,11 @@ metadata:
       description: Set to https://runapi.ai/v1 for Grok on RunAPI.
 ---
 
-# Grok 4.5 on RunAPI
+# Grok 4.3 and 4.5 on RunAPI
 
 Use the official OpenAI SDK or any OpenAI-compatible HTTP client. Set the base
-URL to `https://runapi.ai/v1` and call Chat Completions with `grok-4.5`.
+URL to `https://runapi.ai/v1`. Use Chat Completions with `grok-4.5`, or use
+Responses with `grok-4.3` or `grok-4.5`.
 
 ## Setup
 
@@ -66,6 +67,70 @@ const response = await client.chat.completions.create({
 });
 console.log(response.choices[0].message.content);
 ```
+
+## Responses
+
+Use `client.responses.create` with either exact model id. This synchronous
+example requests strict structured output:
+
+```python
+response = client.responses.create(
+    model="grok-4.3",
+    input="Return the highest rollout risk and its severity.",
+    reasoning={"effort": "high"},
+    text={
+        "format": {
+            "type": "json_schema",
+            "name": "rollout_risk",
+            "strict": True,
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "risk": {"type": "string"},
+                    "severity": {"type": "string", "enum": ["low", "medium", "high"]},
+                },
+                "required": ["risk", "severity"],
+                "additionalProperties": False,
+            },
+        }
+    },
+)
+print(response.output_text)
+print(response.usage)
+```
+
+Responses function tools use a flat tool definition. For a streaming request:
+
+```python
+stream = client.responses.create(
+    model="grok-4.5",
+    input="What is the weather in Shanghai?",
+    stream=True,
+    tools=[{
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current weather for a city",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string",
+                },
+            },
+            "required": ["city"],
+            "additionalProperties": False,
+        },
+    }],
+    tool_choice="auto",
+)
+
+for event in stream:
+    if event.type == "response.function_call_arguments.delta":
+        print(event.delta, end="", flush=True)
+```
+
+Do not treat a Responses stream as complete until it includes
+`response.completed`, terminal `usage`, and `[DONE]`.
 
 ## Streaming
 
@@ -147,13 +212,13 @@ print(response.choices[0].message.content)
 
 Grok text models are available through RunAPI's OpenAI-compatible Chat
 Completions and Responses interfaces, Anthropic-compatible Messages interface,
-and Gemini `contents` interface. RunAPI preserves the exact public model id
-`grok-4.5` across all four request protocols; use the protocol already expected
-by your application or agent runtime.
+and Gemini `contents` interface. RunAPI preserves the exact public model ids
+`grok-4.3` and `grok-4.5` across request protocols; use the protocol already
+expected by your application or agent runtime.
 
 ## Request Rules
 
-- Use the exact model id `grok-4.5`; do not send historical Grok aliases.
+- Use the exact model id `grok-4.3` or `grok-4.5`; do not send historical Grok aliases.
 - `reasoning_effort` accepts `low`, `medium`, or `high`; omit it to use the model default.
 - Do not send `presence_penalty`, `frequency_penalty`, or `stop` with this reasoning model.
 - Preserve terminal `usage` when storing or displaying billing evidence.
@@ -163,16 +228,18 @@ by your application or agent runtime.
 | Model ID | Use when |
 |---|---|
 | `grok-4.5` | Chat, coding, reasoning, tools, and structured output |
+| `grok-4.3` | Responses, reasoning, function tools, and structured output |
 
 ## References
 
-- Model overview and pricing: https://runapi.ai/models/grok/4.5.md
+- Grok 4.3 overview and pricing: https://runapi.ai/models/grok/4.3.md
+- Grok 4.5 overview and pricing: https://runapi.ai/models/grok/4.5.md
 - Provider page: https://runapi.ai/providers/xai.md
 - Catalog: https://runapi.ai/models.md
 
 ## Agent rules
 
 - Keep API keys in `OPENAI_API_KEY`, `RUNAPI_TOKEN`, or a secret manager.
-- Default new integrations to `POST /v1/chat/completions` at `https://runapi.ai/v1`.
+- Default Grok 4.5 chat integrations to `POST /v1/chat/completions`; use `POST /v1/responses` for Grok 4.3 and Responses-native workflows.
 - Prefer streaming for longer responses and request terminal usage.
 - Link to the catalog page for pricing instead of copying price values.

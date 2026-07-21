@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  Call Grok 4.5 with OpenAI-compatible clients through RunAPI.
+  Call Grok 4.3 and 4.5 with OpenAI-compatible clients through RunAPI.
 </p>
 
 <p align="center">
@@ -24,10 +24,10 @@
 <br/>
 
 Configure the official OpenAI SDK or any compatible client with
-`https://runapi.ai/v1`, send `grok-4.5`, and use one RunAPI balance for chat,
-reasoning, function tools, structured output, and streaming. This skill teaches
-Claude Code, Codex, Gemini CLI, Cursor, and 50+ agents how to wire Grok 4.5
-requests through RunAPI.
+`https://runapi.ai/v1`, send `grok-4.3` or `grok-4.5`, and use one RunAPI
+balance for chat, Responses, reasoning, function tools, structured output, and
+streaming. This skill teaches Claude Code, Codex, Gemini CLI, Cursor, and 50+
+agents how to wire Grok requests through RunAPI.
 
 The canonical agent file is `skills/grok/SKILL.md`.
 
@@ -84,13 +84,42 @@ const response = await client.chat.completions.create({
 console.log(response.choices[0].message.content);
 ```
 
+Use Responses with either model id. This example requests strict structured
+output from Grok 4.3:
+
+```python
+response = client.responses.create(
+    model="grok-4.3",
+    input="Return the highest rollout risk and its severity.",
+    reasoning={"effort": "high"},
+    text={
+        "format": {
+            "type": "json_schema",
+            "name": "rollout_risk",
+            "strict": True,
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "risk": {"type": "string"},
+                    "severity": {"type": "string", "enum": ["low", "medium", "high"]},
+                },
+                "required": ["risk", "severity"],
+                "additionalProperties": False,
+            },
+        }
+    },
+)
+print(response.output_text)
+print(response.usage)
+```
+
 ## Protocol compatibility
 
 Grok text models are available through RunAPI's OpenAI-compatible Chat
 Completions and Responses interfaces, Anthropic-compatible Messages interface,
-and Gemini `contents` interface. RunAPI preserves the exact public model id
-`grok-4.5` across all four request protocols; use the protocol already expected
-by your application or agent runtime.
+and Gemini `contents` interface. RunAPI preserves the exact public model ids
+`grok-4.3` and `grok-4.5` across request protocols; use the protocol already
+expected by your application or agent runtime.
 
 Get a RunAPI API Key at <https://runapi.ai/api_keys>.
 
@@ -99,6 +128,7 @@ Get a RunAPI API Key at <https://runapi.ai/api_keys>.
 | Model ID | Notes |
 |---|---|
 | `grok-4.5` | Chat, coding, reasoning, tools, and structured output |
+| `grok-4.3` | Reasoning, Responses, function tools, and structured output |
 
 ## References
 
@@ -109,9 +139,9 @@ Get a RunAPI API Key at <https://runapi.ai/api_keys>.
 ## Agent rules
 
 - Keep API keys in `OPENAI_API_KEY` or a secret manager.
-- Use the exact model id `grok-4.5`.
-- Stream longer responses with `stream_options.include_usage` enabled.
-- Link to <https://runapi.ai/models/grok/4.5> for pricing.
+- Use the exact model id `grok-4.3` or `grok-4.5`.
+- For Responses streams, wait for `response.completed`, terminal `usage`, and `[DONE]`.
+- Link to <https://runapi.ai/models/grok/4.3> or <https://runapi.ai/models/grok/4.5> for pricing.
 
 ## License
 
