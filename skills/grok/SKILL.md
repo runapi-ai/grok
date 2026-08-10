@@ -1,6 +1,6 @@
 ---
 name: grok
-description: Call Grok 4.3 and 4.5 through RunAPI with the official OpenAI SDK or compatible clients. Use when the user asks for Grok Chat Completions, Responses, streaming, reasoning effort, function tools, structured JSON output, or wants to point an OpenAI-compatible client at RunAPI.
+description: Call Grok 4.3, 4.5, and Grok 4.20 non-reasoning through RunAPI with the official OpenAI SDK or compatible clients.
 metadata:
   openclaw:
     homepage: https://runapi.ai/models/grok
@@ -18,11 +18,15 @@ metadata:
       description: Set to https://runapi.ai/v1 for Grok on RunAPI.
 ---
 
-# Grok 4.3 and 4.5 on RunAPI
+# Grok on RunAPI
 
 Use the official OpenAI SDK or any OpenAI-compatible HTTP client. Set the base
 URL to `https://runapi.ai/v1`. Use Chat Completions with `grok-4.5`, or use
 Responses with `grok-4.3` or `grok-4.5`.
+
+Use `grok-4.20-0309-non-reasoning` for text-only Chat, Responses, or Messages
+requests. It is stateless and supports only basic system/user/assistant history;
+tools, structured output, images, caching, and continuation fields are rejected.
 
 ## Setup
 
@@ -227,6 +231,7 @@ expected by your application or agent runtime.
 
 | Model ID | Use when |
 |---|---|
+| `grok-4.20-0309-non-reasoning` | — |
 | `grok-4.5` | Chat, coding, reasoning, tools, and structured output |
 | `grok-4.3` | Responses, reasoning, function tools, and structured output |
 

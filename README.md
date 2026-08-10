@@ -127,6 +127,7 @@ Get a RunAPI API Key at <https://runapi.ai/api_keys>.
 
 | Model ID | Notes |
 |---|---|
+| `grok-4.20-0309-non-reasoning` | — |
 | `grok-4.5` | Chat, coding, reasoning, tools, and structured output |
 | `grok-4.3` | Reasoning, Responses, function tools, and structured output |
 
