@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.2.3](https://github.com/runapi-ai/grok/releases/tag/v0.2.3) - 2026-08-12
+
+### Changed
+- Document Grok authentication, request, result verification, and stop boundaries in the primary recipe, with compatibility protocols loaded only when required.
+
+
 ## [v0.2.2](https://github.com/runapi-ai/grok/releases/tag/v0.2.2) - 2026-08-10
 
 ### Changed
