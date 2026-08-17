@@ -1,6 +1,6 @@
 ---
 name: grok
-description: Call Grok 4.3, 4.5, and Grok 4.20 non-reasoning through RunAPI using OpenAI-compatible Chat Completions and Responses. Use for text, streaming, tools, structured output, or an existing compatibility client that needs the conditional reference.
+description: Call Grok 4.6 through RunAPI Responses only; use Grok 4.3, 4.5, or Grok 4.20 non-reasoning through their verified OpenAI-compatible interfaces. Use for text, streaming, tools, structured output, or an existing compatibility client that needs the conditional reference.
 documentation: https://runapi.ai/models/grok.md
 provider_page: https://runapi.ai/providers/xai.md
 catalog: https://runapi.ai/models.md
@@ -31,23 +31,33 @@ Set `OPENAI_API_KEY` to a RunAPI API key and `OPENAI_BASE_URL` to `https://runap
 from openai import OpenAI
 client = OpenAI(api_key="YOUR_RUNAPI_TOKEN", base_url="https://runapi.ai/v1")
 response = client.responses.create(
-    model="grok-4.5",
-    input="Review this rollout plan.",
-    reasoning={"effort": "high"},
+    model="grok-4.6",
+    input=[{
+        "role": "user",
+        "content": [{"type": "input_text", "text": "Review this rollout plan."}],
+    }],
+    stream=False,
+    reasoning={"effort": "xhigh"},
 )
 print(response.output_text)
 print(response.usage)
 ```
 
-Use Chat Completions for `grok-4.5` chat workflows and Responses for
-`grok-4.3` or `grok-4.5`. For streaming Responses, set `stream=True` and consume
-through `response.completed` and `[DONE]`.
+Use Chat Completions for `grok-4.5` chat workflows. Use Responses for
+`grok-4.3`, `grok-4.5`, or `grok-4.6`; Grok 4.6 does not expose the other
+compatibility protocols. Grok 4.6 accepts function tools and image input; add
+an `input_image` part with a public `image_url` alongside `input_text` for image
+understanding. Only `function` tools are supported; hosted tools such as
+`web_search`, `x_search`, `file_search`, `code_interpreter`, `image_generation`,
+and `mcp` are rejected. Do not send `input_file` or state fields such as
+`previous_response_id` for Grok 4.6. For streaming Responses, set `stream=True`
+and consume through `response.completed`, terminal `usage`, and `[DONE]`.
 
 ### Verify result
 
 Responses require final output, one usage-bearing `response.completed`, and
-`[DONE]` for SSE. Chat requires final assistant content, `finish_reason`, and
-terminal `usage`.
+`[DONE]`. Chat requires final assistant content, `finish_reason`, and terminal
+`usage`.
 
 ### Stop boundaries
 
@@ -59,13 +69,14 @@ only when the current RunAPI contract verifies them for the exact model.
 
 ## Compatibility protocols
 
-Load [compatibility protocols](references/compatibility-protocols.md) only when an existing client requires Anthropic Messages or Gemini contents.
+Load [compatibility protocols](references/compatibility-protocols.md) only when an existing client requires Grok 4.3 or 4.5 through Anthropic Messages or Gemini contents.
 
 ## Supported models
 
 | Model ID | Use when |
 |---|---|
 | `grok-4.20-0309-non-reasoning` | Verified text workloads without reasoning controls |
+| `grok-4.6` | Responses workflows with image input, function tools, structured output, and low through xhigh reasoning |
 | `grok-4.5` | Current Grok chat and reasoning workloads |
 | `grok-4.3` | Stable Grok reasoning workloads |
 
