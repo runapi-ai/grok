@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.2.5](https://github.com/runapi-ai/grok/releases/tag/v0.2.5) - 2026-08-21
+
+### Added
+- Document Grok 4.6 image input, structured output, reasoning levels, function tools, streaming completion, and unsupported hosted tools, file input, and stateful continuation.
+
+
 ## [v0.2.4](https://github.com/runapi-ai/grok/releases/tag/v0.2.4) - 2026-08-17
 
 ### Added
