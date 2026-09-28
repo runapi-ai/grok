@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.2.6](https://github.com/runapi-ai/grok/releases/tag/v0.2.6) - 2026-09-28
+
+### Fixed
+- Document Grok 4.6 Chat Completions with streaming function tools, tool results, and reasoning controls alongside Responses.
+
+
 ## [v0.2.5](https://github.com/runapi-ai/grok/releases/tag/v0.2.5) - 2026-08-21
 
 ### Added

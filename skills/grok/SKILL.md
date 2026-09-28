@@ -1,6 +1,6 @@
 ---
 name: grok
-description: Call Grok 4.6 through RunAPI Responses only; use Grok 4.3, 4.5, or Grok 4.20 non-reasoning through their verified OpenAI-compatible interfaces. Use for text, streaming, tools, structured output, or an existing compatibility client that needs the conditional reference.
+description: Call Grok 4.6 through RunAPI Chat Completions or Responses; use Grok 4.3, 4.5, or Grok 4.20 non-reasoning through their verified OpenAI-compatible interfaces. Use for text, streaming, tools, structured output, or an existing compatibility client that needs the conditional reference.
 documentation: https://runapi.ai/models/grok.md
 provider_page: https://runapi.ai/providers/xai.md
 catalog: https://runapi.ai/models.md
@@ -43,9 +43,14 @@ print(response.output_text)
 print(response.usage)
 ```
 
-Use Chat Completions for `grok-4.5` chat workflows. Use Responses for
-`grok-4.3`, `grok-4.5`, or `grok-4.6`; Grok 4.6 does not expose the other
-compatibility protocols. Grok 4.6 accepts function tools and image input; add
+Use Chat Completions for `grok-4.5` or `grok-4.6` chat workflows. Grok 4.6
+Chat accepts `reasoning_effort="high"`, `max_completion_tokens=64000`, function
+tools and streaming with `stream_options={"include_usage": True}`. For tool
+continuation, retain the assistant's `tool_calls` and return each result as a
+`role="tool"` message with the matching `tool_call_id`.
+
+Use Responses for `grok-4.3`, `grok-4.5`, or `grok-4.6`; Grok 4.6 does not
+expose Anthropic Messages or Gemini contents. Grok 4.6 accepts function tools and image input; add
 an `input_image` part with a public `image_url` alongside `input_text` for image
 understanding. Only `function` tools are supported; hosted tools such as
 `web_search`, `x_search`, `file_search`, `code_interpreter`, `image_generation`,
@@ -76,7 +81,7 @@ Load [compatibility protocols](references/compatibility-protocols.md) only when 
 | Model ID | Use when |
 |---|---|
 | `grok-4.20-0309-non-reasoning` | Verified text workloads without reasoning controls |
-| `grok-4.6` | Responses workflows with image input, function tools, structured output, and low through xhigh reasoning |
+| `grok-4.6` | Chat Completions and Responses, streaming function tools, tool history, and low through xhigh reasoning; Responses also supports image input and structured output |
 | `grok-4.5` | Current Grok chat and reasoning workloads |
 | `grok-4.3` | Stable Grok reasoning workloads |
 

@@ -26,7 +26,7 @@
 Configure the official OpenAI SDK or any compatible client with
 `https://runapi.ai/v1`, send an exact Grok model id, and use one RunAPI balance
 for chat, Responses, reasoning, tools, structured output, and streaming. Grok
-4.6 is available through Responses; Grok 4.3 and 4.5 retain their existing
+4.6 is available through Chat Completions and Responses; Grok 4.3 and 4.5 retain their existing
 compatibility interfaces. This skill teaches Claude Code, Codex, Gemini CLI,
 Cursor, and 50+ agents how to wire Grok requests through RunAPI.
 
@@ -123,7 +123,11 @@ print(response.usage)
 
 ## Protocol compatibility
 
-Grok 4.6 is available through RunAPI's OpenAI-compatible Responses interface.
+Grok 4.6 is available through RunAPI's OpenAI-compatible Chat Completions and
+Responses interfaces. Chat clients can use `reasoning_effort: high`,
+`max_completion_tokens: 64000`, streaming and function tools. Include the
+assistant's `tool_calls` and a matching `tool_call_id` for each tool result when
+continuing a conversation.
 Grok 4.3 and 4.5 remain available through Chat Completions, Responses,
 Anthropic-compatible Messages, and Gemini `contents`. Use the exact protocol
 supported by the selected model.
@@ -135,7 +139,7 @@ Get a RunAPI API Key at <https://runapi.ai/api_keys>.
 | Model ID | Notes |
 |---|---|
 | `grok-4.20-0309-non-reasoning` | — |
-| `grok-4.6` | Responses, image input, four reasoning levels, function tools, and structured output |
+| `grok-4.6` | Chat Completions and Responses, four reasoning levels, streaming function tools and tool history; Responses image input and structured output |
 | `grok-4.5` | Chat, coding, reasoning, tools, and structured output |
 | `grok-4.3` | Reasoning, Responses, function tools, and structured output |
 
