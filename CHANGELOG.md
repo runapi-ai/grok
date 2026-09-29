@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.2.7](https://github.com/runapi-ai/grok/releases/tag/v0.2.7) - 2026-09-29
+
+### Added
+- grok-4.7 joins the supported model table, documented for Chat Completions and Responses with low through xhigh reasoning and function tools, and for Anthropic Messages and Gemini contents through the compatibility reference.
+
+### Changed
+- Grok 4.6 Responses now accepts the hosted web_search tool alongside function tools, so Codex CLI works with Grok 4.6.
+
+### Removed
+- grok-4.3 (retired 2026-09-28) is no longer listed; requests for it return 410 model_retired.
+  Migration: Use grok-4.5 or grok-4.6 through Chat Completions or Responses instead of grok-4.3.
+
+
 ## [v0.2.6](https://github.com/runapi-ai/grok/releases/tag/v0.2.6) - 2026-09-28
 
 ### Fixed
