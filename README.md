@@ -128,8 +128,10 @@ Completions and Responses interfaces. Chat clients can use `reasoning_effort: hi
 `max_completion_tokens: 64000`, streaming and function tools. Include the
 assistant's `tool_calls` and a matching `tool_call_id` for each tool result when
 continuing a conversation.
-Grok 4.5 and 4.7 are also available through Anthropic-compatible
-Messages and Gemini `contents`. Use the exact protocol
+Grok 4.7 accepts plain text through Chat Completions, Responses,
+Anthropic-compatible Messages, and Gemini `contents`; reasoning controls,
+tools, structured output, and media input are not yet verified for it.
+Grok 4.5 also serves Messages and Gemini `contents`. Use the exact protocol
 supported by the selected model.
 
 Get a RunAPI API Key at <https://runapi.ai/api_keys>.
@@ -139,7 +141,7 @@ Get a RunAPI API Key at <https://runapi.ai/api_keys>.
 | Model ID | Notes |
 |---|---|
 | `grok-4.20-0309-non-reasoning` | — |
-| `grok-4.7` | Chat Completions and Responses with low through xhigh reasoning and function tools; Anthropic Messages and Gemini contents through compatibility protocols |
+| `grok-4.7` | Text through Chat Completions, Responses, Anthropic Messages, or Gemini contents; no reasoning controls, tools, structured output, or media input yet |
 | `grok-4.6` | Chat Completions and Responses, four reasoning levels, streaming function tools and tool history; Responses image input and structured output |
 | `grok-4.5` | Chat, coding, reasoning, tools, and structured output |
 
@@ -153,9 +155,10 @@ Get a RunAPI API Key at <https://runapi.ai/api_keys>.
 
 - Keep API keys in `OPENAI_API_KEY` or a secret manager.
 - Use the exact model id `grok-4.5`, `grok-4.6`, or `grok-4.7`.
-- Add `input_image` with a public `image_url` for Grok 4.6 or 4.7 image understanding.
+- Add `input_image` with a public `image_url` for Grok 4.6 image understanding; send text only to Grok 4.7.
 - Grok 4.6 Responses accepts `function` tools and the hosted `web_search` tool (billed per call), so Codex CLI works with it.
 - Do not send `input_file` or state fields such as `previous_response_id` for Grok 4.6 or 4.7.
+- Send plain text to Grok 4.7 on every protocol; do not add reasoning controls, tools, or structured output yet.
 - For Responses streams, wait for `response.completed`, terminal `usage`, and `[DONE]`.
 - Link to the matching catalog variant page for pricing: <https://runapi.ai/models/grok/4.5>, <https://runapi.ai/models/grok/4.6>, or <https://runapi.ai/models/grok/4.7>.
 

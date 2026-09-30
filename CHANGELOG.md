@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.3.0](https://github.com/runapi-ai/grok/releases/tag/v0.3.0) - 2026-09-30
+
+### Added
+- Add Grok 4.7 through Responses with text input, streaming function tools, structured output, and low through xhigh reasoning.
+
+
 ## [v0.2.7](https://github.com/runapi-ai/grok/releases/tag/v0.2.7) - 2026-09-29
 
 ### Added

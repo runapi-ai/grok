@@ -1,6 +1,6 @@
 ---
 name: grok
-description: Call Grok 4.7 or 4.6 through RunAPI Chat Completions or Responses; use Grok 4.5 or Grok 4.20 non-reasoning through their verified OpenAI-compatible interfaces. Use for text, streaming, tools, structured output, or an existing compatibility client that needs the conditional reference.
+description: Call Grok 4.7 for text through RunAPI Chat Completions, Responses, Anthropic Messages, or Gemini contents. Use Grok 4.6 through Chat Completions or Responses; use Grok 4.5 or Grok 4.20 non-reasoning through their documented interfaces.
 documentation: https://runapi.ai/models/grok.md
 provider_page: https://runapi.ai/providers/xai.md
 catalog: https://runapi.ai/models.md
@@ -37,25 +37,32 @@ response = client.responses.create(
         "content": [{"type": "input_text", "text": "Review this rollout plan."}],
     }],
     stream=False,
-    reasoning={"effort": "xhigh"},
 )
 print(response.output_text)
 print(response.usage)
 ```
 
 Use Chat Completions for `grok-4.5`, `grok-4.6`, or `grok-4.7` chat workflows.
-Grok 4.6 and 4.7 Chat accept `reasoning_effort="high"`, `max_completion_tokens=64000`, function
-tools and streaming with `stream_options={"include_usage": True}`. For tool
-continuation, retain the assistant's `tool_calls` and return each result as a
-`role="tool"` message with the matching `tool_call_id`.
+Grok 4.6 Chat accepts `reasoning_effort="high"`, `max_completion_tokens=64000`,
+function tools and streaming with `stream_options={"include_usage": True}`.
+Grok 4.7 Chat accepts text messages only. For tool continuation, retain the assistant's `tool_calls`
+and return each result as a `role="tool"` message with the matching
+`tool_call_id`.
 
 Use Responses for `grok-4.5`, `grok-4.6`, or `grok-4.7`; Grok 4.6 does not
-expose Anthropic Messages or Gemini contents. Grok 4.6 and 4.7 accept function tools and image input; add
-an `input_image` part with a public `image_url` alongside `input_text` for image
-understanding. Grok 4.6 Responses also accepts the hosted `web_search` tool, so Codex CLI
-works with Grok 4.6; web search calls are billed per call on top of tokens.
-Do not send `input_file` or state fields such as
-`previous_response_id` for Grok 4.6 or 4.7. For streaming Responses, set `stream=True`
+expose Anthropic Messages or Gemini contents. Grok 4.6 accepts function tools
+and image input; add an `input_image` part with a public `image_url` alongside
+`input_text` for image understanding. Grok 4.6 Responses also accepts hosted
+`web_search` (billed per call on top of tokens), so Codex CLI works with it.
+Do not send `input_file` or state fields such as `previous_response_id` for
+Grok 4.6 or 4.7.
+
+`grok-4.7` accepts text through Chat Completions, Responses, Anthropic
+Messages, and Gemini `contents`. Reasoning controls, function tools, tool
+history, structured output, image or file input, hosted tools, and cache
+controls are not yet verified for `grok-4.7`; send plain text requests only.
+
+For streaming Responses, set `stream=True`
 and consume through `response.completed`, terminal `usage`, and `[DONE]`.
 
 ### Verify result
@@ -81,7 +88,7 @@ Load [compatibility protocols](references/compatibility-protocols.md) only when 
 | Model ID | Use when |
 |---|---|
 | `grok-4.20-0309-non-reasoning` | Verified text workloads without reasoning controls |
-| `grok-4.7` | Newest Grok for chat and reasoning workloads, with low through xhigh reasoning and function tools |
+| `grok-4.7` | Text through Chat Completions, Responses, Anthropic Messages, or Gemini contents; no reasoning controls, tools, structured output, or media input yet |
 | `grok-4.6` | Chat Completions and Responses, streaming function tools, tool history, and low through xhigh reasoning; Responses also supports image input and structured output |
 | `grok-4.5` | Current Grok chat and reasoning workloads |
 
